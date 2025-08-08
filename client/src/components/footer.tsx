@@ -63,7 +63,7 @@ export default function Footer() {
             <ul className="space-y-2 text-sm">
               <li>
                 <a 
-                  href="tel:988" 
+                  href="tel:1234567890" 
                   className="text-gray-300 hover:text-white transition-colors"
                   data-testid="footer-link-crisis"
                 >
@@ -81,7 +81,7 @@ export default function Footer() {
               </li>
               <li>
                 <a 
-                  href="mailto:support@mindmapar.com" 
+                  href="mailto:varun160106@gmail.com" 
                   className="text-gray-300 hover:text-white transition-colors"
                   data-testid="footer-link-email"
                 >
@@ -114,7 +114,7 @@ export default function Footer() {
         </div>
         
         <div className="border-t border-sage-600 mt-8 pt-8 text-center text-sm text-gray-300">
-          <p>&copy; 2023 MindMap AR. All rights reserved. Made with ❤️ for neurodivergent teens.</p>
+          <p>&copy; 2025 MindMap AR. All rights reserved. Made with ❤️ for neurodivergent teens.</p>
         </div>
       </div>
     </footer>

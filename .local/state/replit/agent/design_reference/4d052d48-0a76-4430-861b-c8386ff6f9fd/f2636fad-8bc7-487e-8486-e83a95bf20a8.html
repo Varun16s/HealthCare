@@ -1,0 +1,1380 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MindMap AR - Mental Health Navigation for Neurodivergent Teens</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: {
+                            50: '#F0FDFA',
+                            100: '#CCFBF1',
+                            500: '#4FD1C7',
+                            600: '#0D9488',
+                            700: '#0F766E'
+                        },
+                        secondary: {
+                            50: '#F5F3FF',
+                            100: '#EDE9FE',
+                            500: '#A78BFA',
+                            600: '#7C3AED'
+                        },
+                        accent: {
+                            50: '#FEF2F2',
+                            100: '#FEE2E2',
+                            500: '#FCA5A5'
+                        },
+                        sage: {
+                            100: '#F3F4F6',
+                            300: '#D1D5DB',
+                            500: '#9CA3AF',
+                            700: '#374151'
+                        }
+                    },
+                    fontFamily: {
+                        'inter': ['Inter', 'system-ui', 'sans-serif']
+                    },
+                    animation: {
+                        'fade-in': 'fadeIn 0.5s ease-in-out',
+                        'slide-up': 'slideUp 0.4s ease-out',
+                        'pulse-soft': 'pulseSoft 2s infinite'
+                    }
+                }
+            }
+        }
+    </script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        @keyframes slideUp {
+            from { transform: translateY(20px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+        @keyframes pulseSoft {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.7; }
+        }
+        .gradient-bg {
+            background: linear-gradient(135deg, #F0FDFA 0%, #F5F3FF 100%);
+        }
+        .chat-bubble-user {
+            background: linear-gradient(135deg, #4FD1C7 0%, #0D9488 100%);
+        }
+        .chat-bubble-ai {
+            background: linear-gradient(135deg, #A78BFA 0%, #7C3AED 100%);
+        }
+    </style>
+</head>
+<body class="font-inter bg-gray-50 text-sage-700">
+    <!-- @COMPONENT: NavigationHeader -->
+    <nav class="bg-white shadow-sm border-b border-sage-100">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-16">
+                <div class="flex items-center">
+                    <i class="fas fa-brain text-primary-500 text-2xl mr-3"></i>
+                    <span class="text-xl font-semibold text-sage-700">MindMap AR</span>
+                </div>
+                <div class="hidden md:flex items-center space-x-6">
+                    <button onclick="showView('home')" class="nav-link text-sage-600 hover:text-primary-600 transition-colors">Home</button>
+                    <button onclick="showView('about')" class="nav-link text-sage-600 hover:text-primary-600 transition-colors">About</button>
+                    <button onclick="showView('faq')" class="nav-link text-sage-600 hover:text-primary-600 transition-colors">FAQ</button>
+                    <button onclick="showView('contact')" class="nav-link text-sage-600 hover:text-primary-600 transition-colors">Contact</button>
+                    <button id="loginBtn" onclick="showView('login')" class="bg-primary-500 text-white px-4 py-2 rounded-full hover:bg-primary-600 transition-colors">Login</button>
+                    <button id="dashboardBtn" onclick="showView('dashboard')" class="bg-secondary-500 text-white px-4 py-2 rounded-full hover:bg-secondary-600 transition-colors hidden">Dashboard</button>
+                    <button id="logoutBtn" onclick="logout()" class="text-sage-600 hover:text-red-500 transition-colors hidden">Logout</button>
+                </div>
+                <div class="md:hidden">
+                    <button id="mobile-menu-btn" class="text-sage-600">
+                        <i class="fas fa-bars text-xl"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </nav>
+    <!-- @END_COMPONENT: NavigationHeader -->
+
+    <!-- Mobile Menu -->
+    <div id="mobile-menu" class="md:hidden bg-white shadow-lg hidden">
+        <div class="px-4 py-4 space-y-3">
+            <button onclick="showView('home')" class="block w-full text-left text-sage-600 hover:text-primary-600 py-2">Home</button>
+            <button onclick="showView('about')" class="block w-full text-left text-sage-600 hover:text-primary-600 py-2">About</button>
+            <button onclick="showView('faq')" class="block w-full text-left text-sage-600 hover:text-primary-600 py-2">FAQ</button>
+            <button onclick="showView('contact')" class="block w-full text-left text-sage-600 hover:text-primary-600 py-2">Contact</button>
+            <button id="mobile-loginBtn" onclick="showView('login')" class="block w-full bg-primary-500 text-white px-4 py-2 rounded-full text-center">Login</button>
+        </div>
+    </div>
+
+    <main class="min-h-screen">
+        <!-- @COMPONENT: HomeView -->
+        <div id="home-view" class="view">
+            <!-- Hero Section -->
+            <section class="gradient-bg py-20">
+                <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+                    <div class="animate-fade-in">
+                        <h1 class="text-4xl sm:text-5xl lg:text-6xl font-semibold text-sage-700 mb-6 leading-tight">
+                            Navigate Your Mental Health Journey with 
+                            <span class="text-primary-600">Confidence</span>
+                        </h1>
+                        <p class="text-lg sm:text-xl text-sage-600 mb-8 max-w-3xl mx-auto leading-relaxed">
+                            AI-powered appointment scheduling designed specifically for neurodivergent teens. 
+                            Find the right support when you need it most.
+                        </p>
+                        <div class="space-y-4 sm:space-y-0 sm:space-x-4 sm:flex sm:justify-center">
+                            <button onclick="showView('signup')" class="w-full sm:w-auto bg-primary-500 text-white px-8 py-4 rounded-full text-lg font-medium hover:bg-primary-600 transition-all transform hover:scale-105 shadow-lg">
+                                Get Started Today
+                            </button>
+                            <button onclick="showView('about')" class="w-full sm:w-auto bg-white text-primary-600 px-8 py-4 rounded-full text-lg font-medium hover:bg-gray-50 transition-colors border border-primary-200">
+                                Learn More
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Mission Statement -->
+            <section class="py-16 bg-white">
+                <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+                    <h2 class="text-3xl font-semibold text-sage-700 mb-8">Our Mission</h2>
+                    <p class="text-lg text-sage-600 leading-relaxed mb-8">
+                        We believe every teen deserves accessible, understanding, and personalized mental health support. 
+                        Our AI-powered platform removes barriers and connects you with the right care at the right time.
+                    </p>
+                    <div class="grid md:grid-cols-3 gap-8">
+                        <div class="bg-primary-50 p-6 rounded-xl">
+                            <i class="fas fa-heart text-primary-500 text-3xl mb-4"></i>
+                            <h3 class="text-xl font-medium text-sage-700 mb-3">Compassionate Care</h3>
+                            <p class="text-sage-600">Understanding and empathy at every step of your journey</p>
+                        </div>
+                        <div class="bg-secondary-50 p-6 rounded-xl">
+                            <i class="fas fa-robot text-secondary-500 text-3xl mb-4"></i>
+                            <h3 class="text-xl font-medium text-sage-700 mb-3">AI-Powered Matching</h3>
+                            <p class="text-sage-600">Smart scheduling that understands your unique needs</p>
+                        </div>
+                        <div class="bg-accent-50 p-6 rounded-xl">
+                            <i class="fas fa-shield-alt text-accent-500 text-3xl mb-4"></i>
+                            <h3 class="text-xl font-medium text-sage-700 mb-3">Safe & Secure</h3>
+                            <p class="text-sage-600">Your privacy and safety are our top priorities</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Features Preview -->
+            <section class="py-16 bg-sage-50">
+                <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+                    <h2 class="text-3xl font-semibold text-sage-700 text-center mb-12">How It Works</h2>
+                    <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
+                        <div class="text-center">
+                            <div class="bg-primary-100 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
+                                <span class="text-primary-600 font-semibold text-xl">1</span>
+                            </div>
+                            <h3 class="text-lg font-medium text-sage-700 mb-2">Create Profile</h3>
+                            <p class="text-sage-600">Tell us about yourself and your preferences</p>
+                        </div>
+                        <div class="text-center">
+                            <div class="bg-secondary-100 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
+                                <span class="text-secondary-600 font-semibold text-xl">2</span>
+                            </div>
+                            <h3 class="text-lg font-medium text-sage-700 mb-2">Chat with AI</h3>
+                            <p class="text-sage-600">Discuss your needs with our understanding AI assistant</p>
+                        </div>
+                        <div class="text-center">
+                            <div class="bg-accent-100 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
+                                <span class="text-accent-600 font-semibold text-xl">3</span>
+                            </div>
+                            <h3 class="text-lg font-medium text-sage-700 mb-2">Get Matched</h3>
+                            <p class="text-sage-600">Receive personalized specialist and time recommendations</p>
+                        </div>
+                        <div class="text-center">
+                            <div class="bg-primary-100 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
+                                <span class="text-primary-600 font-semibold text-xl">4</span>
+                            </div>
+                            <h3 class="text-lg font-medium text-sage-700 mb-2">Book & Meet</h3>
+                            <p class="text-sage-600">Schedule your appointment and get the support you need</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+        <!-- @END_COMPONENT: HomeView -->
+
+        <!-- @COMPONENT: AboutView -->
+        <div id="about-view" class="view hidden">
+            <section class="py-20 bg-white">
+                <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+                    <h1 class="text-4xl font-semibold text-sage-700 text-center mb-8">About MindMap AR</h1>
+                    <div class="prose prose-lg mx-auto text-sage-600">
+                        <p class="lead text-xl mb-8 text-center">
+                            Empowering neurodivergent teens through intelligent mental health navigation
+                        </p>
+                        <div class="bg-gradient-to-r from-primary-50 to-secondary-50 p-8 rounded-xl mb-8">
+                            <h2 class="text-2xl font-semibold text-sage-700 mb-4">Why We Exist</h2>
+                            <p>Traditional mental health systems often fail to meet the unique needs of neurodivergent teens. Long wait times, mismatched specialists, and overwhelming processes create barriers to care when support is needed most.</p>
+                        </div>
+                        <div class="grid md:grid-cols-2 gap-8 mb-8">
+                            <div class="bg-white p-6 rounded-xl shadow-sm border border-sage-100">
+                                <h3 class="text-xl font-semibold text-sage-700 mb-3">Our Approach</h3>
+                                <ul class="space-y-2 text-sage-600">
+                                    <li>• AI-powered specialist matching</li>
+                                    <li>• Neurodivergent-friendly interfaces</li>
+                                    <li>• Flexible scheduling options</li>
+                                    <li>• Crisis support integration</li>
+                                </ul>
+                            </div>
+                            <div class="bg-white p-6 rounded-xl shadow-sm border border-sage-100">
+                                <h3 class="text-xl font-semibold text-sage-700 mb-3">Our Values</h3>
+                                <ul class="space-y-2 text-sage-600">
+                                    <li>• Accessibility for all abilities</li>
+                                    <li>• Privacy and confidentiality</li>
+                                    <li>• Inclusive and affirming care</li>
+                                    <li>• Evidence-based practices</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+        <!-- @END_COMPONENT: AboutView -->
+
+        <!-- @COMPONENT: LoginView -->
+        <div id="login-view" class="view hidden">
+            <section class="py-20 gradient-bg min-h-screen flex items-center">
+                <div class="max-w-md mx-auto px-4 sm:px-6 lg:px-8 w-full">
+                    <div class="bg-white rounded-2xl shadow-xl p-8">
+                        <div class="text-center mb-8">
+                            <i class="fas fa-brain text-primary-500 text-4xl mb-4"></i>
+                            <h2 class="text-2xl font-semibold text-sage-700">Welcome Back</h2>
+                            <p class="text-sage-600 mt-2">Sign in to your account</p>
+                        </div>
+                        <form id="loginForm" class="space-y-6">
+                            <div>
+                                <label for="loginEmail" class="block text-sm font-medium text-sage-700 mb-2">Email</label>
+                                <input type="email" id="loginEmail" required 
+                                       class="w-full px-4 py-3 border border-sage-200 rounded-xl focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-colors"
+                                       placeholder="your@email.com">
+                            </div>
+                            <div>
+                                <label for="loginPassword" class="block text-sm font-medium text-sage-700 mb-2">Password</label>
+                                <input type="password" id="loginPassword" required 
+                                       class="w-full px-4 py-3 border border-sage-200 rounded-xl focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-colors"
+                                       placeholder="••••••••">
+                            </div>
+                            <button type="submit" class="w-full bg-primary-500 text-white py-3 rounded-xl font-medium hover:bg-primary-600 transition-colors">
+                                Sign In
+                            </button>
+                        </form>
+                        <div class="mt-6 text-center">
+                            <p class="text-sage-600">
+                                Don't have an account? 
+                                <button onclick="showView('signup')" class="text-primary-600 hover:text-primary-700 font-medium">Sign up</button>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+        <!-- @END_COMPONENT: LoginView -->
+
+        <!-- @COMPONENT: SignUpView -->
+        <div id="signup-view" class="view hidden">
+            <section class="py-20 gradient-bg min-h-screen flex items-center">
+                <div class="max-w-md mx-auto px-4 sm:px-6 lg:px-8 w-full">
+                    <div class="bg-white rounded-2xl shadow-xl p-8">
+                        <div class="text-center mb-8">
+                            <i class="fas fa-user-plus text-secondary-500 text-4xl mb-4"></i>
+                            <h2 class="text-2xl font-semibold text-sage-700">Create Account</h2>
+                            <p class="text-sage-600 mt-2">Join our supportive community</p>
+                        </div>
+                        <form id="signupForm" class="space-y-6">
+                            <div class="grid grid-cols-2 gap-4">
+                                <div>
+                                    <label for="firstName" class="block text-sm font-medium text-sage-700 mb-2">First Name</label>
+                                    <input type="text" id="firstName" required 
+                                           class="w-full px-4 py-3 border border-sage-200 rounded-xl focus:ring-2 focus:ring-secondary-500 focus:border-transparent transition-colors"
+                                           placeholder="Alex">
+                                </div>
+                                <div>
+                                    <label for="lastName" class="block text-sm font-medium text-sage-700 mb-2">Last Name</label>
+                                    <input type="text" id="lastName" required 
+                                           class="w-full px-4 py-3 border border-sage-200 rounded-xl focus:ring-2 focus:ring-secondary-500 focus:border-transparent transition-colors"
+                                           placeholder="Smith">
+                                </div>
+                            </div>
+                            <div>
+                                <label for="signupEmail" class="block text-sm font-medium text-sage-700 mb-2">Email</label>
+                                <input type="email" id="signupEmail" required 
+                                       class="w-full px-4 py-3 border border-sage-200 rounded-xl focus:ring-2 focus:ring-secondary-500 focus:border-transparent transition-colors"
+                                       placeholder="your@email.com">
+                            </div>
+                            <div>
+                                <label for="age" class="block text-sm font-medium text-sage-700 mb-2">Age</label>
+                                <select id="age" required 
+                                        class="w-full px-4 py-3 border border-sage-200 rounded-xl focus:ring-2 focus:ring-secondary-500 focus:border-transparent transition-colors">
+                                    <option value="">Select your age</option>
+                                    <option value="13">13</option>
+                                    <option value="14">14</option>
+                                    <option value="15">15</option>
+                                    <option value="16">16</option>
+                                    <option value="17">17</option>
+                                    <option value="18">18</option>
+                                    <option value="19">19</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label for="signupPassword" class="block text-sm font-medium text-sage-700 mb-2">Password</label>
+                                <input type="password" id="signupPassword" required 
+                                       class="w-full px-4 py-3 border border-sage-200 rounded-xl focus:ring-2 focus:ring-secondary-500 focus:border-transparent transition-colors"
+                                       placeholder="••••••••">
+                            </div>
+                            <button type="submit" class="w-full bg-secondary-500 text-white py-3 rounded-xl font-medium hover:bg-secondary-600 transition-colors">
+                                Create Account
+                            </button>
+                        </form>
+                        <div class="mt-6 text-center">
+                            <p class="text-sage-600">
+                                Already have an account? 
+                                <button onclick="showView('login')" class="text-secondary-600 hover:text-secondary-700 font-medium">Sign in</button>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+        <!-- @END_COMPONENT: SignUpView -->
+
+        <!-- @COMPONENT: DashboardView -->
+        <div id="dashboard-view" class="view hidden">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+                <!-- Dashboard Header -->
+                <div class="bg-gradient-to-r from-primary-500 to-secondary-500 rounded-2xl p-8 text-white mb-8">
+                    <h1 class="text-3xl font-semibold mb-2">Welcome back, <span id="userGreeting" data-bind="user.firstName">Alex</span>!</h1>
+                    <p class="opacity-90">How are you feeling today? Let's find the support you need.</p>
+                </div>
+
+                <!-- Dashboard Navigation -->
+                <div class="flex flex-wrap gap-4 mb-8">
+                    <button onclick="showDashboardSection('profile')" class="dashboard-nav-btn bg-white px-6 py-3 rounded-xl shadow-sm border border-sage-200 hover:shadow-md transition-all">
+                        <i class="fas fa-user mr-2"></i> Profile
+                    </button>
+                    <button onclick="showDashboardSection('chat')" class="dashboard-nav-btn bg-white px-6 py-3 rounded-xl shadow-sm border border-sage-200 hover:shadow-md transition-all">
+                        <i class="fas fa-comments mr-2"></i> AI Assistant
+                    </button>
+                    <button onclick="showDashboardSection('calendar')" class="dashboard-nav-btn bg-white px-6 py-3 rounded-xl shadow-sm border border-sage-200 hover:shadow-md transition-all">
+                        <i class="fas fa-calendar mr-2"></i> Calendar
+                    </button>
+                    <button onclick="showDashboardSection('booking')" class="dashboard-nav-btn bg-white px-6 py-3 rounded-xl shadow-sm border border-sage-200 hover:shadow-md transition-all">
+                        <i class="fas fa-plus mr-2"></i> Book Appointment
+                    </button>
+                </div>
+
+                <!-- Profile Section -->
+                <div id="profile-section" class="dashboard-section">
+                    <div class="bg-white rounded-2xl shadow-sm border border-sage-100 p-8">
+                        <h2 class="text-2xl font-semibold text-sage-700 mb-6">Your Profile</h2>
+                        <form id="profileForm" class="space-y-6">
+                            <div class="grid md:grid-cols-2 gap-6">
+                                <div>
+                                    <label class="block text-sm font-medium text-sage-700 mb-2">First Name</label>
+                                    <input type="text" id="profileFirstName" value="Alex" data-bind="user.firstName"
+                                           class="w-full px-4 py-3 border border-sage-200 rounded-xl focus:ring-2 focus:ring-primary-500 focus:border-transparent">
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium text-sage-700 mb-2">Last Name</label>
+                                    <input type="text" id="profileLastName" value="Smith" data-bind="user.lastName"
+                                           class="w-full px-4 py-3 border border-sage-200 rounded-xl focus:ring-2 focus:ring-primary-500 focus:border-transparent">
+                                </div>
+                            </div>
+                            <div class="grid md:grid-cols-2 gap-6">
+                                <div>
+                                    <label class="block text-sm font-medium text-sage-700 mb-2">Age</label>
+                                    <select id="profileAge" data-bind="user.age"
+                                            class="w-full px-4 py-3 border border-sage-200 rounded-xl focus:ring-2 focus:ring-primary-500 focus:border-transparent">
+                                        <option value="16" selected>16</option>
+                                        <option value="13">13</option>
+                                        <option value="14">14</option>
+                                        <option value="15">15</option>
+                                        <option value="17">17</option>
+                                        <option value="18">18</option>
+                                        <option value="19">19</option>
+                                    </select>
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium text-sage-700 mb-2">Preferred Communication</label>
+                                    <select id="communicationPreference" data-bind="user.communicationPreference"
+                                            class="w-full px-4 py-3 border border-sage-200 rounded-xl focus:ring-2 focus:ring-primary-500 focus:border-transparent">
+                                        <option value="video" selected>Video calls</option>
+                                        <option value="phone">Phone calls</option>
+                                        <option value="text">Text/chat</option>
+                                        <option value="in-person">In-person</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-sage-700 mb-2">Areas of Support (select all that apply)</label>
+                                <div class="grid grid-cols-2 md:grid-cols-3 gap-3">
+                                    <label class="flex items-center space-x-2">
+                                        <input type="checkbox" checked class="rounded border-sage-300 text-primary-500 focus:ring-primary-500">
+                                        <span class="text-sm text-sage-600">Anxiety</span>
+                                    </label>
+                                    <label class="flex items-center space-x-2">
+                                        <input type="checkbox" class="rounded border-sage-300 text-primary-500 focus:ring-primary-500">
+                                        <span class="text-sm text-sage-600">Depression</span>
+                                    </label>
+                                    <label class="flex items-center space-x-2">
+                                        <input type="checkbox" checked class="rounded border-sage-300 text-primary-500 focus:ring-primary-500">
+                                        <span class="text-sm text-sage-600">ADHD</span>
+                                    </label>
+                                    <label class="flex items-center space-x-2">
+                                        <input type="checkbox" class="rounded border-sage-300 text-primary-500 focus:ring-primary-500">
+                                        <span class="text-sm text-sage-600">Autism</span>
+                                    </label>
+                                    <label class="flex items-center space-x-2">
+                                        <input type="checkbox" class="rounded border-sage-300 text-primary-500 focus:ring-primary-500">
+                                        <span class="text-sm text-sage-600">Social Skills</span>
+                                    </label>
+                                    <label class="flex items-center space-x-2">
+                                        <input type="checkbox" class="rounded border-sage-300 text-primary-500 focus:ring-primary-500">
+                                        <span class="text-sm text-sage-600">Stress Management</span>
+                                    </label>
+                                </div>
+                            </div>
+                            <button type="submit" class="bg-primary-500 text-white px-6 py-3 rounded-xl hover:bg-primary-600 transition-colors">
+                                Update Profile
+                            </button>
+                        </form>
+                    </div>
+                </div>
+
+                <!-- AI Chat Section -->
+                <div id="chat-section" class="dashboard-section hidden">
+                    <div class="bg-white rounded-2xl shadow-sm border border-sage-100 overflow-hidden">
+                        <div class="bg-gradient-to-r from-secondary-500 to-primary-500 p-6 text-white">
+                            <h2 class="text-2xl font-semibold mb-2">AI Assistant</h2>
+                            <p class="opacity-90">I'm here to help you find the right mental health support. Tell me how you're feeling today.</p>
+                        </div>
+                        <div id="chatMessages" class="h-96 overflow-y-auto p-6 space-y-4">
+                            <!-- AI Welcome Message -->
+                            <div class="flex items-start space-x-3">
+                                <div class="w-8 h-8 rounded-full chat-bubble-ai flex items-center justify-center">
+                                    <i class="fas fa-robot text-white text-sm"></i>
+                                </div>
+                                <div class="bg-gray-100 rounded-2xl rounded-tl-sm p-4 max-w-md">
+                                    <p class="text-sage-700">Hi Alex! I'm here to help you schedule an appointment that fits your needs. How are you feeling today, and what kind of support would be most helpful?</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="p-6 border-t border-sage-100">
+                            <div class="flex space-x-3">
+                                <input type="text" id="chatInput" placeholder="Type your message here..." 
+                                       class="flex-1 px-4 py-3 border border-sage-200 rounded-xl focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+                                       onkeypress="if(event.key==='Enter') sendMessage()">
+                                <button onclick="sendMessage()" class="bg-primary-500 text-white px-6 py-3 rounded-xl hover:bg-primary-600 transition-colors">
+                                    <i class="fas fa-paper-plane"></i>
+                                </button>
+                            </div>
+                            <div class="mt-3 flex flex-wrap gap-2">
+                                <button onclick="sendQuickMessage('I\'m feeling anxious')" class="text-sm bg-sage-100 text-sage-700 px-3 py-2 rounded-full hover:bg-sage-200 transition-colors">
+                                    I'm feeling anxious
+                                </button>
+                                <button onclick="sendQuickMessage('I need help with ADHD')" class="text-sm bg-sage-100 text-sage-700 px-3 py-2 rounded-full hover:bg-sage-200 transition-colors">
+                                    I need help with ADHD
+                                </button>
+                                <button onclick="sendQuickMessage('I want to talk to someone')" class="text-sm bg-sage-100 text-sage-700 px-3 py-2 rounded-full hover:bg-sage-200 transition-colors">
+                                    I want to talk to someone
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Calendar Section -->
+                <div id="calendar-section" class="dashboard-section hidden">
+                    <div class="bg-white rounded-2xl shadow-sm border border-sage-100 p-8">
+                        <h2 class="text-2xl font-semibold text-sage-700 mb-6">Your Appointments</h2>
+                        
+                        <!-- Upcoming Appointments -->
+                        <div class="mb-8">
+                            <h3 class="text-lg font-medium text-sage-700 mb-4">Upcoming Appointments</h3>
+                            <div class="space-y-4" data-mock="true">
+                                <div class="bg-primary-50 border border-primary-200 rounded-xl p-4">
+                                    <div class="flex justify-between items-start">
+                                        <div>
+                                            <h4 class="font-medium text-sage-700">Dr. Sarah Johnson</h4>
+                                            <p class="text-sm text-sage-600">Anxiety & ADHD Specialist</p>
+                                            <div class="flex items-center mt-2 space-x-4">
+                                                <span class="text-sm text-sage-600">
+                                                    <i class="fas fa-calendar mr-1"></i> Tomorrow, Dec 15
+                                                </span>
+                                                <span class="text-sm text-sage-600">
+                                                    <i class="fas fa-clock mr-1"></i> 2:00 PM - 3:00 PM
+                                                </span>
+                                            </div>
+                                        </div>
+                                        <div class="flex space-x-2">
+                                            <button class="text-primary-600 hover:text-primary-700 text-sm">Reschedule</button>
+                                            <button class="text-red-500 hover:text-red-600 text-sm">Cancel</button>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="bg-secondary-50 border border-secondary-200 rounded-xl p-4">
+                                    <div class="flex justify-between items-start">
+                                        <div>
+                                            <h4 class="font-medium text-sage-700">Alex Chen, LCSW</h4>
+                                            <p class="text-sm text-sage-600">Teen Counselor</p>
+                                            <div class="flex items-center mt-2 space-x-4">
+                                                <span class="text-sm text-sage-600">
+                                                    <i class="fas fa-calendar mr-1"></i> Dec 22
+                                                </span>
+                                                <span class="text-sm text-sage-600">
+                                                    <i class="fas fa-clock mr-1"></i> 4:00 PM - 5:00 PM
+                                                </span>
+                                            </div>
+                                        </div>
+                                        <div class="flex space-x-2">
+                                            <button class="text-secondary-600 hover:text-secondary-700 text-sm">Reschedule</button>
+                                            <button class="text-red-500 hover:text-red-600 text-sm">Cancel</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Simple Calendar View -->
+                        <div>
+                            <h3 class="text-lg font-medium text-sage-700 mb-4">December 2023</h3>
+                            <div class="grid grid-cols-7 gap-1 text-center">
+                                <!-- Calendar Header -->
+                                <div class="p-2 text-sm font-medium text-sage-600">Sun</div>
+                                <div class="p-2 text-sm font-medium text-sage-600">Mon</div>
+                                <div class="p-2 text-sm font-medium text-sage-600">Tue</div>
+                                <div class="p-2 text-sm font-medium text-sage-600">Wed</div>
+                                <div class="p-2 text-sm font-medium text-sage-600">Thu</div>
+                                <div class="p-2 text-sm font-medium text-sage-600">Fri</div>
+                                <div class="p-2 text-sm font-medium text-sage-600">Sat</div>
+                                
+                                <!-- Calendar Days (Week 1) -->
+                                <div class="p-2 text-sage-400">26</div>
+                                <div class="p-2 text-sage-400">27</div>
+                                <div class="p-2 text-sage-400">28</div>
+                                <div class="p-2 text-sage-400">29</div>
+                                <div class="p-2 text-sage-400">30</div>
+                                <div class="p-2 text-sage-700 hover:bg-sage-100 rounded cursor-pointer">1</div>
+                                <div class="p-2 text-sage-700 hover:bg-sage-100 rounded cursor-pointer">2</div>
+                                
+                                <!-- Calendar Days (Week 2) -->
+                                <div class="p-2 text-sage-700 hover:bg-sage-100 rounded cursor-pointer">3</div>
+                                <div class="p-2 text-sage-700 hover:bg-sage-100 rounded cursor-pointer">4</div>
+                                <div class="p-2 text-sage-700 hover:bg-sage-100 rounded cursor-pointer">5</div>
+                                <div class="p-2 text-sage-700 hover:bg-sage-100 rounded cursor-pointer">6</div>
+                                <div class="p-2 text-sage-700 hover:bg-sage-100 rounded cursor-pointer">7</div>
+                                <div class="p-2 text-sage-700 hover:bg-sage-100 rounded cursor-pointer">8</div>
+                                <div class="p-2 text-sage-700 hover:bg-sage-100 rounded cursor-pointer">9</div>
+                                
+                                <!-- Calendar Days (Week 3) -->
+                                <div class="p-2 text-sage-700 hover:bg-sage-100 rounded cursor-pointer">10</div>
+                                <div class="p-2 text-sage-700 hover:bg-sage-100 rounded cursor-pointer">11</div>
+                                <div class="p-2 text-sage-700 hover:bg-sage-100 rounded cursor-pointer">12</div>
+                                <div class="p-2 text-sage-700 hover:bg-sage-100 rounded cursor-pointer">13</div>
+                                <div class="p-2 bg-yellow-100 text-sage-700 rounded font-medium">14</div>
+                                <div class="p-2 bg-primary-100 text-primary-700 rounded font-medium">15</div>
+                                <div class="p-2 text-sage-700 hover:bg-sage-100 rounded cursor-pointer">16</div>
+                                
+                                <!-- Calendar Days (Week 4) -->
+                                <div class="p-2 text-sage-700 hover:bg-sage-100 rounded cursor-pointer">17</div>
+                                <div class="p-2 text-sage-700 hover:bg-sage-100 rounded cursor-pointer">18</div>
+                                <div class="p-2 text-sage-700 hover:bg-sage-100 rounded cursor-pointer">19</div>
+                                <div class="p-2 text-sage-700 hover:bg-sage-100 rounded cursor-pointer">20</div>
+                                <div class="p-2 text-sage-700 hover:bg-sage-100 rounded cursor-pointer">21</div>
+                                <div class="p-2 bg-secondary-100 text-secondary-700 rounded font-medium">22</div>
+                                <div class="p-2 text-sage-700 hover:bg-sage-100 rounded cursor-pointer">23</div>
+                                
+                                <!-- Calendar Days (Week 5) -->
+                                <div class="p-2 text-sage-700 hover:bg-sage-100 rounded cursor-pointer">24</div>
+                                <div class="p-2 text-sage-700 hover:bg-sage-100 rounded cursor-pointer">25</div>
+                                <div class="p-2 text-sage-700 hover:bg-sage-100 rounded cursor-pointer">26</div>
+                                <div class="p-2 text-sage-700 hover:bg-sage-100 rounded cursor-pointer">27</div>
+                                <div class="p-2 text-sage-700 hover:bg-sage-100 rounded cursor-pointer">28</div>
+                                <div class="p-2 text-sage-700 hover:bg-sage-100 rounded cursor-pointer">29</div>
+                                <div class="p-2 text-sage-700 hover:bg-sage-100 rounded cursor-pointer">30</div>
+                                
+                                <!-- Calendar Days (Week 6) -->
+                                <div class="p-2 text-sage-700 hover:bg-sage-100 rounded cursor-pointer">31</div>
+                                <div class="p-2 text-sage-400">1</div>
+                                <div class="p-2 text-sage-400">2</div>
+                                <div class="p-2 text-sage-400">3</div>
+                                <div class="p-2 text-sage-400">4</div>
+                                <div class="p-2 text-sage-400">5</div>
+                                <div class="p-2 text-sage-400">6</div>
+                            </div>
+                            <div class="mt-4 flex items-center justify-center space-x-6 text-sm">
+                                <div class="flex items-center space-x-2">
+                                    <div class="w-3 h-3 bg-yellow-100 rounded"></div>
+                                    <span class="text-sage-600">Today</span>
+                                </div>
+                                <div class="flex items-center space-x-2">
+                                    <div class="w-3 h-3 bg-primary-100 rounded"></div>
+                                    <span class="text-sage-600">Appointments</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Booking Section -->
+                <div id="booking-section" class="dashboard-section hidden">
+                    <div class="bg-white rounded-2xl shadow-sm border border-sage-100 p-8">
+                        <h2 class="text-2xl font-semibold text-sage-700 mb-6">Book New Appointment</h2>
+                        <form id="bookingForm" class="space-y-6">
+                            <div class="grid md:grid-cols-2 gap-6">
+                                <div>
+                                    <label class="block text-sm font-medium text-sage-700 mb-2">Support Type</label>
+                                    <select id="supportType" required 
+                                            class="w-full px-4 py-3 border border-sage-200 rounded-xl focus:ring-2 focus:ring-primary-500 focus:border-transparent">
+                                        <option value="">Select support type</option>
+                                        <option value="anxiety">Anxiety Support</option>
+                                        <option value="depression">Depression Counseling</option>
+                                        <option value="adhd">ADHD Management</option>
+                                        <option value="autism">Autism Support</option>
+                                        <option value="social">Social Skills</option>
+                                        <option value="general">General Counseling</option>
+                                        <option value="crisis">Crisis Support</option>
+                                    </select>
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium text-sage-700 mb-2">Preferred Specialist</label>
+                                    <select id="specialist" required 
+                                            class="w-full px-4 py-3 border border-sage-200 rounded-xl focus:ring-2 focus:ring-primary-500 focus:border-transparent">
+                                        <option value="">Let AI suggest best match</option>
+                                        <option value="dr-johnson">Dr. Sarah Johnson (Anxiety & ADHD)</option>
+                                        <option value="alex-chen">Alex Chen, LCSW (Teen Counselor)</option>
+                                        <option value="dr-patel">Dr. Raj Patel (Autism Specialist)</option>
+                                        <option value="maria-garcia">Maria Garcia, MFT (Family Therapy)</option>
+                                    </select>
+                                </div>
+                            </div>
+                            
+                            <div class="grid md:grid-cols-2 gap-6">
+                                <div>
+                                    <label class="block text-sm font-medium text-sage-700 mb-2">Preferred Date</label>
+                                    <input type="date" id="appointmentDate" required 
+                                           class="w-full px-4 py-3 border border-sage-200 rounded-xl focus:ring-2 focus:ring-primary-500 focus:border-transparent">
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium text-sage-700 mb-2">Preferred Time</label>
+                                    <select id="appointmentTime" required 
+                                            class="w-full px-4 py-3 border border-sage-200 rounded-xl focus:ring-2 focus:ring-primary-500 focus:border-transparent">
+                                        <option value="">Select preferred time</option>
+                                        <option value="9:00">9:00 AM</option>
+                                        <option value="10:00">10:00 AM</option>
+                                        <option value="11:00">11:00 AM</option>
+                                        <option value="14:00">2:00 PM</option>
+                                        <option value="15:00">3:00 PM</option>
+                                        <option value="16:00">4:00 PM</option>
+                                        <option value="17:00">5:00 PM</option>
+                                    </select>
+                                </div>
+                            </div>
+                            
+                            <div>
+                                <label class="block text-sm font-medium text-sage-700 mb-2">Session Type</label>
+                                <div class="grid grid-cols-2 md:grid-cols-4 gap-3">
+                                    <label class="flex items-center space-x-2">
+                                        <input type="radio" name="sessionType" value="video" checked 
+                                               class="text-primary-500 focus:ring-primary-500">
+                                        <span class="text-sm text-sage-600">Video call</span>
+                                    </label>
+                                    <label class="flex items-center space-x-2">
+                                        <input type="radio" name="sessionType" value="phone" 
+                                               class="text-primary-500 focus:ring-primary-500">
+                                        <span class="text-sm text-sage-600">Phone call</span>
+                                    </label>
+                                    <label class="flex items-center space-x-2">
+                                        <input type="radio" name="sessionType" value="chat" 
+                                               class="text-primary-500 focus:ring-primary-500">
+                                        <span class="text-sm text-sage-600">Text chat</span>
+                                    </label>
+                                    <label class="flex items-center space-x-2">
+                                        <input type="radio" name="sessionType" value="in-person" 
+                                               class="text-primary-500 focus:ring-primary-500">
+                                        <span class="text-sm text-sage-600">In-person</span>
+                                    </label>
+                                </div>
+                            </div>
+                            
+                            <div>
+                                <label class="block text-sm font-medium text-sage-700 mb-2">Additional Notes (Optional)</label>
+                                <textarea id="appointmentNotes" rows="4" 
+                                          class="w-full px-4 py-3 border border-sage-200 rounded-xl focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+                                          placeholder="Tell us anything else that might help us provide better support..."></textarea>
+                            </div>
+                            
+                            <div class="flex space-x-4">
+                                <button type="submit" class="bg-primary-500 text-white px-8 py-3 rounded-xl hover:bg-primary-600 transition-colors">
+                                    Book Appointment
+                                </button>
+                                <button type="button" onclick="getAIRecommendation()" class="bg-secondary-500 text-white px-8 py-3 rounded-xl hover:bg-secondary-600 transition-colors">
+                                    Get AI Recommendation
+                                </button>
+                            </div>
+                        </form>
+                        
+                        <!-- AI Recommendation Results -->
+                        <div id="aiRecommendation" class="hidden mt-8 p-6 bg-gradient-to-r from-secondary-50 to-primary-50 rounded-xl border border-secondary-200">
+                            <h3 class="text-lg font-medium text-sage-700 mb-4">
+                                <i class="fas fa-lightbulb text-secondary-500 mr-2"></i>
+                                AI Recommendation
+                            </h3>
+                            <div id="recommendationContent">
+                                <!-- AI recommendation will be populated here -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- @END_COMPONENT: DashboardView -->
+
+        <!-- @COMPONENT: FAQView -->
+        <div id="faq-view" class="view hidden">
+            <section class="py-20 bg-white">
+                <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+                    <h1 class="text-4xl font-semibold text-sage-700 text-center mb-8">Frequently Asked Questions</h1>
+                    <div class="space-y-6">
+                        <div class="bg-sage-50 rounded-xl p-6">
+                            <h3 class="text-lg font-medium text-sage-700 mb-3">How does the AI scheduling work?</h3>
+                            <p class="text-sage-600">Our AI assistant analyzes your preferences, emotional state, and needs to match you with the most suitable mental health professionals and optimal appointment times.</p>
+                        </div>
+                        <div class="bg-sage-50 rounded-xl p-6">
+                            <h3 class="text-lg font-medium text-sage-700 mb-3">Is my information private and secure?</h3>
+                            <p class="text-sage-600">Yes, absolutely. We use end-to-end encryption and follow HIPAA guidelines to ensure your personal information and conversations remain completely confidential.</p>
+                        </div>
+                        <div class="bg-sage-50 rounded-xl p-6">
+                            <h3 class="text-lg font-medium text-sage-700 mb-3">What types of mental health support do you offer?</h3>
+                            <p class="text-sage-600">We connect you with specialists in anxiety, depression, ADHD, autism spectrum support, social skills development, and general teen counseling.</p>
+                        </div>
+                        <div class="bg-sage-50 rounded-xl p-6">
+                            <h3 class="text-lg font-medium text-sage-700 mb-3">Can I change or cancel my appointment?</h3>
+                            <p class="text-sage-600">Yes, you can reschedule or cancel appointments up to 24 hours before your scheduled time through your dashboard or by contacting support.</p>
+                        </div>
+                        <div class="bg-sage-50 rounded-xl p-6">
+                            <h3 class="text-lg font-medium text-sage-700 mb-3">Do I need parent/guardian permission?</h3>
+                            <p class="text-sage-600">For users under 18, we recommend involving a parent or guardian. However, we also provide confidential support options depending on your local laws and circumstances.</p>
+                        </div>
+                        <div class="bg-sage-50 rounded-xl p-6">
+                            <h3 class="text-lg font-medium text-sage-700 mb-3">What if I'm in crisis or need immediate help?</h3>
+                            <p class="text-sage-600">If you're experiencing a mental health crisis, please contact emergency services (911) or the 988 Suicide & Crisis Lifeline. Our platform also provides quick access to crisis resources.</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+        <!-- @END_COMPONENT: FAQView -->
+
+        <!-- @COMPONENT: ContactView -->
+        <div id="contact-view" class="view hidden">
+            <section class="py-20 gradient-bg">
+                <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+                    <h1 class="text-4xl font-semibold text-sage-700 text-center mb-8">Contact Support</h1>
+                    <div class="grid md:grid-cols-2 gap-8">
+                        <div class="bg-white rounded-2xl shadow-xl p-8">
+                            <h2 class="text-2xl font-semibold text-sage-700 mb-6">Get in Touch</h2>
+                            <form id="contactForm" class="space-y-6">
+                                <div>
+                                    <label class="block text-sm font-medium text-sage-700 mb-2">Name</label>
+                                    <input type="text" required 
+                                           class="w-full px-4 py-3 border border-sage-200 rounded-xl focus:ring-2 focus:ring-primary-500 focus:border-transparent">
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium text-sage-700 mb-2">Email</label>
+                                    <input type="email" required 
+                                           class="w-full px-4 py-3 border border-sage-200 rounded-xl focus:ring-2 focus:ring-primary-500 focus:border-transparent">
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium text-sage-700 mb-2">Subject</label>
+                                    <select required 
+                                            class="w-full px-4 py-3 border border-sage-200 rounded-xl focus:ring-2 focus:ring-primary-500 focus:border-transparent">
+                                        <option value="">Select a topic</option>
+                                        <option value="technical">Technical Support</option>
+                                        <option value="appointment">Appointment Help</option>
+                                        <option value="billing">Billing Question</option>
+                                        <option value="crisis">Crisis Support</option>
+                                        <option value="feedback">Feedback</option>
+                                        <option value="other">Other</option>
+                                    </select>
+                                </div>
+                                <div>
+                                    <label class="block text-sm font-medium text-sage-700 mb-2">Message</label>
+                                    <textarea rows="6" required 
+                                              class="w-full px-4 py-3 border border-sage-200 rounded-xl focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+                                              placeholder="How can we help you today?"></textarea>
+                                </div>
+                                <button type="submit" class="w-full bg-primary-500 text-white py-3 rounded-xl font-medium hover:bg-primary-600 transition-colors">
+                                    Send Message
+                                </button>
+                            </form>
+                        </div>
+                        <div class="bg-white rounded-2xl shadow-xl p-8">
+                            <h2 class="text-2xl font-semibold text-sage-700 mb-6">Other Ways to Reach Us</h2>
+                            <div class="space-y-6">
+                                <div class="flex items-start space-x-4">
+                                    <div class="bg-primary-100 p-3 rounded-xl">
+                                        <i class="fas fa-phone text-primary-600"></i>
+                                    </div>
+                                    <div>
+                                        <h3 class="font-medium text-sage-700">Phone Support</h3>
+                                        <p class="text-sage-600">1-800-MINDMAP</p>
+                                        <p class="text-sm text-sage-500">Mon-Fri: 8am-8pm PST</p>
+                                    </div>
+                                </div>
+                                <div class="flex items-start space-x-4">
+                                    <div class="bg-secondary-100 p-3 rounded-xl">
+                                        <i class="fas fa-envelope text-secondary-600"></i>
+                                    </div>
+                                    <div>
+                                        <h3 class="font-medium text-sage-700">Email Support</h3>
+                                        <p class="text-sage-600">support@mindmapar.com</p>
+                                        <p class="text-sm text-sage-500">Response within 24 hours</p>
+                                    </div>
+                                </div>
+                                <div class="flex items-start space-x-4">
+                                    <div class="bg-accent-100 p-3 rounded-xl">
+                                        <i class="fas fa-exclamation-triangle text-accent-600"></i>
+                                    </div>
+                                    <div>
+                                        <h3 class="font-medium text-sage-700">Crisis Support</h3>
+                                        <p class="text-sage-600">988 Suicide & Crisis Lifeline</p>
+                                        <p class="text-sm text-sage-500">Available 24/7</p>
+                                    </div>
+                                </div>
+                                <div class="bg-gradient-to-r from-primary-50 to-secondary-50 p-6 rounded-xl">
+                                    <h3 class="font-medium text-sage-700 mb-2">Live Chat</h3>
+                                    <p class="text-sage-600 text-sm mb-4">Get instant help from our support team</p>
+                                    <button class="bg-primary-500 text-white px-4 py-2 rounded-xl text-sm hover:bg-primary-600 transition-colors">
+                                        Start Chat
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+        <!-- @END_COMPONENT: ContactView -->
+    </main>
+
+    <!-- @COMPONENT: Footer -->
+    <footer class="bg-sage-700 text-white py-12">
+        <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid md:grid-cols-4 gap-8">
+                <div>
+                    <div class="flex items-center mb-4">
+                        <i class="fas fa-brain text-primary-400 text-2xl mr-3"></i>
+                        <span class="text-xl font-semibold">MindMap AR</span>
+                    </div>
+                    <p class="text-gray-300 text-sm">
+                        Empowering neurodivergent teens through AI-powered mental health navigation.
+                    </p>
+                </div>
+                <div>
+                    <h3 class="font-semibold mb-4">Quick Links</h3>
+                    <ul class="space-y-2 text-sm">
+                        <li><button onclick="showView('home')" class="text-gray-300 hover:text-white transition-colors">Home</button></li>
+                        <li><button onclick="showView('about')" class="text-gray-300 hover:text-white transition-colors">About</button></li>
+                        <li><button onclick="showView('faq')" class="text-gray-300 hover:text-white transition-colors">FAQ</button></li>
+                        <li><button onclick="showView('contact')" class="text-gray-300 hover:text-white transition-colors">Contact</button></li>
+                    </ul>
+                </div>
+                <div>
+                    <h3 class="font-semibold mb-4">Support</h3>
+                    <ul class="space-y-2 text-sm">
+                        <li><a href="tel:988" class="text-gray-300 hover:text-white transition-colors">Crisis Line: 988</a></li>
+                        <li><a href="tel:1-800-MINDMAP" class="text-gray-300 hover:text-white transition-colors">Support: 1-800-MINDMAP</a></li>
+                        <li><a href="mailto:support@mindmapar.com" class="text-gray-300 hover:text-white transition-colors">Email Support</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h3 class="font-semibold mb-4">Legal</h3>
+                    <ul class="space-y-2 text-sm">
+                        <li><a href="#" class="text-gray-300 hover:text-white transition-colors">Privacy Policy</a></li>
+                        <li><a href="#" class="text-gray-300 hover:text-white transition-colors">Terms of Service</a></li>
+                        <li><a href="#" class="text-gray-300 hover:text-white transition-colors">HIPAA Compliance</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="border-t border-sage-600 mt-8 pt-8 text-center text-sm text-gray-300">
+                <p>&copy; 2023 MindMap AR. All rights reserved. Made with ❤️ for neurodivergent teens.</p>
+            </div>
+        </div>
+    </footer>
+    <!-- @END_COMPONENT: Footer -->
+
+    <script>
+        (function() {
+            // Application state management
+            let currentUser = null;
+            let chatHistory = [];
+            let appointments = [];
+
+            // Initialize the app
+            function init() {
+                // Check if user is logged in
+                const userData = localStorage.getItem('mindmap_user');
+                if (userData) {
+                    currentUser = JSON.parse(userData);
+                    updateUIForLoggedInUser();
+                }
+
+                // Load saved appointments
+                const savedAppointments = localStorage.getItem('mindmap_appointments');
+                if (savedAppointments) {
+                    appointments = JSON.parse(savedAppointments);
+                }
+
+                // Mobile menu toggle
+                document.getElementById('mobile-menu-btn').addEventListener('click', function() {
+                    const mobileMenu = document.getElementById('mobile-menu');
+                    mobileMenu.classList.toggle('hidden');
+                });
+
+                // Set minimum date for appointment booking to today
+                const today = new Date().toISOString().split('T')[0];
+                const dateInput = document.getElementById('appointmentDate');
+                if (dateInput) {
+                    dateInput.min = today;
+                }
+
+                // Form event listeners
+                setupFormListeners();
+            }
+
+            // Setup form event listeners
+            function setupFormListeners() {
+                // Login form
+                document.getElementById('loginForm').addEventListener('submit', function(e) {
+                    e.preventDefault();
+                    handleLogin();
+                });
+
+                // Signup form
+                document.getElementById('signupForm').addEventListener('submit', function(e) {
+                    e.preventDefault();
+                    handleSignup();
+                });
+
+                // Profile form
+                document.getElementById('profileForm').addEventListener('submit', function(e) {
+                    e.preventDefault();
+                    handleProfileUpdate();
+                });
+
+                // Booking form
+                document.getElementById('bookingForm').addEventListener('submit', function(e) {
+                    e.preventDefault();
+                    handleBooking();
+                });
+
+                // Contact form
+                document.getElementById('contactForm').addEventListener('submit', function(e) {
+                    e.preventDefault();
+                    handleContactSubmission();
+                });
+            }
+
+            // Navigation functions
+            window.showView = function(viewName) {
+                // Hide all views
+                document.querySelectorAll('.view').forEach(view => {
+                    view.classList.add('hidden');
+                });
+
+                // Show selected view
+                const targetView = document.getElementById(viewName + '-view');
+                if (targetView) {
+                    targetView.classList.remove('hidden');
+                }
+
+                // Hide mobile menu
+                document.getElementById('mobile-menu').classList.add('hidden');
+
+                // Special handling for dashboard
+                if (viewName === 'dashboard') {
+                    if (!currentUser) {
+                        showView('login');
+                        return;
+                    }
+                    showDashboardSection('profile');
+                }
+            };
+
+            window.showDashboardSection = function(sectionName) {
+                // Hide all dashboard sections
+                document.querySelectorAll('.dashboard-section').forEach(section => {
+                    section.classList.add('hidden');
+                });
+
+                // Show selected section
+                const targetSection = document.getElementById(sectionName + '-section');
+                if (targetSection) {
+                    targetSection.classList.remove('hidden');
+                }
+
+                // Update navigation button states
+                document.querySelectorAll('.dashboard-nav-btn').forEach(btn => {
+                    btn.classList.remove('bg-primary-100', 'text-primary-700', 'border-primary-300');
+                    btn.classList.add('bg-white', 'border-sage-200');
+                });
+
+                event.target.classList.remove('bg-white', 'border-sage-200');
+                event.target.classList.add('bg-primary-100', 'text-primary-700', 'border-primary-300');
+            };
+
+            // Authentication functions
+            function handleLogin() {
+                const email = document.getElementById('loginEmail').value;
+                const password = document.getElementById('loginPassword').value;
+
+                // TODO: Implement actual authentication logic
+                // For now, simulate successful login
+                currentUser = {
+                    id: 1,
+                    firstName: 'Alex',
+                    lastName: 'Smith',
+                    email: email,
+                    age: 16,
+                    communicationPreference: 'video'
+                };
+
+                localStorage.setItem('mindmap_user', JSON.stringify(currentUser));
+                updateUIForLoggedInUser();
+                showView('dashboard');
+            }
+
+            function handleSignup() {
+                const firstName = document.getElementById('firstName').value;
+                const lastName = document.getElementById('lastName').value;
+                const email = document.getElementById('signupEmail').value;
+                const age = document.getElementById('age').value;
+                const password = document.getElementById('signupPassword').value;
+
+                // TODO: Implement actual registration logic
+                // For now, simulate successful registration
+                currentUser = {
+                    id: Date.now(),
+                    firstName: firstName,
+                    lastName: lastName,
+                    email: email,
+                    age: parseInt(age),
+                    communicationPreference: 'video'
+                };
+
+                localStorage.setItem('mindmap_user', JSON.stringify(currentUser));
+                updateUIForLoggedInUser();
+                showView('dashboard');
+            }
+
+            function updateUIForLoggedInUser() {
+                // Update navigation
+                document.getElementById('loginBtn').classList.add('hidden');
+                document.getElementById('dashboardBtn').classList.remove('hidden');
+                document.getElementById('logoutBtn').classList.remove('hidden');
+
+                // Update mobile navigation
+                document.getElementById('mobile-loginBtn').classList.add('hidden');
+
+                // Update greeting
+                if (currentUser) {
+                    const greetingElement = document.getElementById('userGreeting');
+                    if (greetingElement) {
+                        greetingElement.textContent = currentUser.firstName;
+                    }
+
+                    // Populate profile form
+                    document.getElementById('profileFirstName').value = currentUser.firstName || '';
+                    document.getElementById('profileLastName').value = currentUser.lastName || '';
+                    document.getElementById('profileAge').value = currentUser.age || '';
+                    document.getElementById('communicationPreference').value = currentUser.communicationPreference || 'video';
+                }
+            }
+
+            window.logout = function() {
+                currentUser = null;
+                localStorage.removeItem('mindmap_user');
+                
+                // Reset UI
+                document.getElementById('loginBtn').classList.remove('hidden');
+                document.getElementById('dashboardBtn').classList.add('hidden');
+                document.getElementById('logoutBtn').classList.add('hidden');
+                document.getElementById('mobile-loginBtn').classList.remove('hidden');
+
+                showView('home');
+            };
+
+            // Profile management
+            function handleProfileUpdate() {
+                if (!currentUser) return;
+
+                currentUser.firstName = document.getElementById('profileFirstName').value;
+                currentUser.lastName = document.getElementById('profileLastName').value;
+                currentUser.age = parseInt(document.getElementById('profileAge').value);
+                currentUser.communicationPreference = document.getElementById('communicationPreference').value;
+
+                localStorage.setItem('mindmap_user', JSON.stringify(currentUser));
+                
+                // Update greeting
+                document.getElementById('userGreeting').textContent = currentUser.firstName;
+
+                // Show success message
+                alert('Profile updated successfully!');
+            }
+
+            // Chat functionality
+            window.sendMessage = function() {
+                const input = document.getElementById('chatInput');
+                const message = input.value.trim();
+                
+                if (!message) return;
+
+                addMessageToChat('user', message);
+                input.value = '';
+
+                // Simulate AI response
+                setTimeout(() => {
+                    const aiResponse = generateAIResponse(message);
+                    addMessageToChat('ai', aiResponse);
+                }, 1000);
+            };
+
+            window.sendQuickMessage = function(message) {
+                addMessageToChat('user', message);
+                
+                setTimeout(() => {
+                    const aiResponse = generateAIResponse(message);
+                    addMessageToChat('ai', aiResponse);
+                }, 1000);
+            };
+
+            function addMessageToChat(sender, message) {
+                const chatMessages = document.getElementById('chatMessages');
+                const messageDiv = document.createElement('div');
+                messageDiv.className = 'flex items-start space-x-3';
+
+                if (sender === 'user') {
+                    messageDiv.classList.add('justify-end');
+                    messageDiv.innerHTML = `
+                        <div class="chat-bubble-user rounded-2xl rounded-tr-sm p-4 max-w-md text-white">
+                            <p>${message}</p>
+                        </div>
+                        <div class="w-8 h-8 rounded-full bg-primary-500 flex items-center justify-center">
+                            <i class="fas fa-user text-white text-sm"></i>
+                        </div>
+                    `;
+                } else {
+                    messageDiv.innerHTML = `
+                        <div class="w-8 h-8 rounded-full chat-bubble-ai flex items-center justify-center">
+                            <i class="fas fa-robot text-white text-sm"></i>
+                        </div>
+                        <div class="bg-gray-100 rounded-2xl rounded-tl-sm p-4 max-w-md">
+                            <p class="text-sage-700">${message}</p>
+                        </div>
+                    `;
+                }
+
+                chatMessages.appendChild(messageDiv);
+                chatMessages.scrollTop = chatMessages.scrollHeight;
+
+                chatHistory.push({ sender, message, timestamp: new Date() });
+            }
+
+            function generateAIResponse(userMessage) {
+                const responses = {
+                    anxiety: [
+                        "I understand you're feeling anxious. That's completely valid. I can help you find a specialist who works specifically with anxiety in teens. Would you prefer to talk to someone today, or would you like to schedule for later this week?",
+                        "Anxiety can feel overwhelming, but you're taking a great step by reaching out. Based on your profile, I recommend Dr. Sarah Johnson who specializes in anxiety and ADHD. She has availability tomorrow at 2 PM or Friday at 4 PM. Which works better for you?"
+                    ],
+                    adhd: [
+                        "ADHD support is really important, and I'm glad you're seeking help. I can connect you with specialists who understand neurodivergent teens. Dr. Sarah Johnson has great reviews from other teens with ADHD. Would you like me to check her availability?",
+                        "Managing ADHD can be challenging, but the right support makes a huge difference. I see you prefer video calls - that works well for ADHD coaching sessions. Shall I suggest some appointment times that might work with your schedule?"
+                    ],
+                    talk: [
+                        "Sometimes we just need someone to listen, and that's perfectly okay. I can help you find a counselor who specializes in working with teens. Alex Chen, LCSW, is really understanding and has great availability this week. Would you like to see their schedule?",
+                        "It sounds like you could benefit from talking to someone supportive. Based on your age and preferences, I think you'd connect well with our teen counselors. Would you prefer someone who uses a more conversational approach or someone more structured?"
+                    ],
+                    default: [
+                        "Thank you for sharing that with me. To help me find the best support for you, could you tell me a bit more about what's been on your mind lately?",
+                        "I'm here to help you find the right mental health support. What kind of challenges have you been facing recently? This will help me match you with the most suitable specialist.",
+                        "I appreciate you reaching out. Every person's needs are unique, and I want to make sure we find someone who's the right fit for you. What would feel most helpful right now - talking through your feelings, getting strategies for specific challenges, or something else?"
+                    ]
+                };
+
+                let category = 'default';
+                const message = userMessage.toLowerCase();
+
+                if (message.includes('anxious') || message.includes('anxiety') || message.includes('worry')) {
+                    category = 'anxiety';
+                } else if (message.includes('adhd') || message.includes('attention') || message.includes('focus')) {
+                    category = 'adhd';
+                } else if (message.includes('talk') || message.includes('someone') || message.includes('listen')) {
+                    category = 'talk';
+                }
+
+                const responseArray = responses[category];
+                return responseArray[Math.floor(Math.random() * responseArray.length)];
+            }
+
+            // Appointment booking
+            function handleBooking() {
+                const supportType = document.getElementById('supportType').value;
+                const specialist = document.getElementById('specialist').value;
+                const date = document.getElementById('appointmentDate').value;
+                const time = document.getElementById('appointmentTime').value;
+                const sessionType = document.querySelector('input[name="sessionType"]:checked').value;
+                const notes = document.getElementById('appointmentNotes').value;
+
+                const appointment = {
+                    id: Date.now(),
+                    supportType,
+                    specialist,
+                    date,
+                    time,
+                    sessionType,
+                    notes,
+                    status: 'scheduled',
+                    createdAt: new Date()
+                };
+
+                appointments.push(appointment);
+                localStorage.setItem('mindmap_appointments', JSON.stringify(appointments));
+
+                alert('Appointment booked successfully! You can view it in your calendar.');
+                
+                // Reset form
+                document.getElementById('bookingForm').reset();
+                
+                // Switch to calendar view
+                showDashboardSection('calendar');
+            }
+
+            window.getAIRecommendation = function() {
+                const supportType = document.getElementById('supportType').value;
+                const date = document.getElementById('appointmentDate').value;
+
+                if (!supportType) {
+                    alert('Please select a support type first.');
+                    return;
+                }
+
+                // Simulate AI processing
+                const recommendationDiv = document.getElementById('aiRecommendation');
+                const contentDiv = document.getElementById('recommendationContent');
+                
+                contentDiv.innerHTML = '<div class="animate-pulse">Analyzing your needs and finding the best match...</div>';
+                recommendationDiv.classList.remove('hidden');
+
+                setTimeout(() => {
+                    const recommendation = generateAppointmentRecommendation(supportType, date);
+                    contentDiv.innerHTML = recommendation;
+                }, 2000);
+            };
+
+            function generateAppointmentRecommendation(supportType, date) {
+                const specialists = {
+                    anxiety: {
+                        name: 'Dr. Sarah Johnson',
+                        specialty: 'Anxiety & ADHD Specialist',
+                        availability: ['2:00 PM', '4:00 PM'],
+                        approach: 'CBT and mindfulness techniques',
+                        rating: '4.9/5'
+                    },
+                    adhd: {
+                        name: 'Dr. Sarah Johnson',
+                        specialty: 'ADHD & Executive Function',
+                        availability: ['10:00 AM', '3:00 PM'],
+                        approach: 'ADHD coaching and executive function skills',
+                        rating: '4.9/5'
+                    },
+                    autism: {
+                        name: 'Dr. Raj Patel',
+                        specialty: 'Autism Spectrum Support',
+                        availability: ['11:00 AM', '2:00 PM'],
+                        approach: 'Strengths-based autism support',
+                        rating: '4.8/5'
+                    },
+                    general: {
+                        name: 'Alex Chen, LCSW',
+                        specialty: 'Teen Counselor',
+                        availability: ['9:00 AM', '4:00 PM'],
+                        approach: 'Person-centered therapy',
+                        rating: '4.9/5'
+                    }
+                };
+
+                const specialist = specialists[supportType] || specialists.general;
+
+                return `
+                    <div class="space-y-4">
+                        <div class="flex items-center justify-between">
+                            <h4 class="font-medium text-sage-700">${specialist.name}</h4>
+                            <span class="text-sm bg-green-100 text-green-700 px-2 py-1 rounded-full">${specialist.rating} rating</span>
+                        </div>
+                        <p class="text-sage-600">${specialist.specialty} • ${specialist.approach}</p>
+                        <div class="bg-white p-4 rounded-lg border border-sage-200">
+                            <h5 class="font-medium text-sage-700 mb-2">Recommended Times:</h5>
+                            <div class="flex space-x-2">
+                                ${specialist.availability.map(time => 
+                                    `<button onclick="fillRecommendedTime('${time}')" class="bg-primary-100 text-primary-700 px-3 py-2 rounded-lg text-sm hover:bg-primary-200 transition-colors">${time}</button>`
+                                ).join('')}
+                            </div>
+                        </div>
+                        <button onclick="acceptRecommendation('${specialist.name}')" class="bg-secondary-500 text-white px-6 py-2 rounded-lg hover:bg-secondary-600 transition-colors">
+                            Book with ${specialist.name}
+                        </button>
+                    </div>
+                `;
+            }
+
+            window.fillRecommendedTime = function(time) {
+                const timeSelect = document.getElementById('appointmentTime');
+                const timeValue = time.includes('AM') ? 
+                    time.replace(' AM', '').padStart(5, '0') :
+                    (parseInt(time) + 12).toString().padStart(2, '0') + ':00';
+                
+                timeSelect.value = timeValue;
+            };
+
+            window.acceptRecommendation = function(specialistName) {
+                const specialistSelect = document.getElementById('specialist');
+                const options = specialistSelect.options;
+                
+                for (let i = 0; i < options.length; i++) {
+                    if (options[i].textContent.includes(specialistName)) {
+                        specialistSelect.value = options[i].value;
+                        break;
+                    }
+                }
+                
+                document.getElementById('aiRecommendation').classList.add('hidden');
+            };
+
+            // Contact form
+            function handleContactSubmission() {
+                // TODO: Implement actual form submission
+                alert('Thank you for your message! Our support team will get back to you within 24 hours.');
+                document.getElementById('contactForm').reset();
+            }
+
+            // Initialize the application
+            init();
+        })();
+    </script>
+</body>
+</html>
